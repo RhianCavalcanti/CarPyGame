@@ -18,6 +18,13 @@ carro = pygame.image.load('carrop1.png')
 policia = pygame.image.load('policia1.png')
 ambulancia = pygame.image.load('ambulancia1.png')
 camionete = pygame.image.load('caminhonete1.png')
+colisaotela= pygame.image.load('telacolisao.png')
+#musica
+pygame.mixer.music.load('musica.mp3')
+pygame.mixer.music.set_volume(0.1)
+pygame.mixer.music.play(-1)
+somcolisao= pygame.mixer.Sound('somcolisao1.ogg')
+
 
 font = pygame.font.SysFont('arial black',30)
 texto = font.render("Score: ",True,(255,255,255),(0,0,0))
@@ -26,6 +33,7 @@ pos_texto.center = (65,50)
 
 janela = pygame.display.set_mode((800,600))
 pygame.display.set_caption("CarPyGame")
+
 
 janela_aberta = True
 while janela_aberta :
@@ -46,6 +54,7 @@ while janela_aberta :
     if ((x + 80 > pos_x and y + 180 > pos_y) ):
         y = 1200
 
+
     if ((x - 80 < pos_x - 300 and y + 180 > pos_y_a)):
         y = 1200
 
@@ -65,12 +74,12 @@ while janela_aberta :
         timer +=1
     else:
         tempo_segundo +=1
-        texto = font.render("Tempo: "+str(tempo_segundo), True, (255, 255, 255), (0, 0, 0))
+        texto = font.render("Score: "+str(tempo_segundo), True, (255, 255, 255), (0, 0, 0))
         timer = 0
 
     pos_y  -= velocidade_outros
     pos_y_a -= velocidade_outros +2
-    pos_y_c -= velocidade_outros +10    # carro preto
+    pos_y_c -= velocidade_outros +10  
 
 
     janela.blit(fundo,(0,0))
@@ -79,6 +88,12 @@ while janela_aberta :
     janela.blit(ambulancia, (pos_x - 300, pos_y_a))
     janela.blit(camionete, (pos_x - 136, pos_y_c))
     janela.blit(texto,pos_texto)
-    pygame.display.update()
+    colisao=1
+    if y==1200 and somcolisao.get_num_channels()!=8: #condicional para o efeito sonoro 'somcolisao' não ficar em looping
+        somcolisao.play(0)
+    if y==1200:
+        janela.blit(colisaotela, (50, 50)) #fiz outra condicional para a 'colisaotela' aparecer e não sair
+        pygame.mixer.music.stop()
 
+    pygame.display.update()
 pygame.quit()
